@@ -14,4 +14,13 @@ class Producte extends Model
         'preu',
         'categoria_id',
     ];
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
+    }
+
+    public function usuarisFavorits()
+    {
+        return $this->belongsToMany(User::class, 'usuari_producte')->withPivot('data_afegit');
+    }
 }

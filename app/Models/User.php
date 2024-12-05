@@ -45,4 +45,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function carret()
+    {
+        return $this->hasOne(Carret::class);
+    }
+
+    public function comandes()
+    {
+        return $this->hasMany(Comanda::class);
+    }
+
+    public function productesFavorits()
+    {
+        return $this->belongsToMany(Producte::class, 'usuari_producte')->withPivot('data_afegit');
+    }
 }
+
+
