@@ -12,7 +12,8 @@ class ComandaController extends Controller
      */
     public function index()
     {
-        //
+        $comandes = Comanda::all();
+        return view('orders.index', compact('comandes'));
     }
 
     /**
@@ -36,7 +37,7 @@ class ComandaController extends Controller
      */
     public function show(Comanda $comanda)
     {
-        //
+        return view('orders.show', compact('comanda'));
     }
 
     /**
@@ -60,6 +61,7 @@ class ComandaController extends Controller
      */
     public function destroy(Comanda $comanda)
     {
-        //
+        $comanda->delete();
+        return redirect()->route('orders.index')->with('success', 'Comanda eliminada correctament.');
     }
 }

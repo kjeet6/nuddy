@@ -12,7 +12,8 @@ class ProducteController extends Controller
      */
     public function index()
     {
-        //
+        $productes = Producte::all();
+        return view('products.index', compact('productes'));
     }
 
     /**
@@ -20,7 +21,7 @@ class ProducteController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -28,7 +29,16 @@ class ProducteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'descripcio' => 'required|string',
+            'preu' => 'required|numeric',
+            'quantitat_stock' => 'required|integer',
+        ]);
+
+        Producte::create($request->all());
+
+        return redirect()->route('products.index')->with('success', 'Producte creat correctament.');
     }
 
     /**
@@ -36,7 +46,7 @@ class ProducteController extends Controller
      */
     public function show(Producte $producte)
     {
-        //
+        return view('products.show', compact('producte'));
     }
 
     /**
@@ -44,7 +54,7 @@ class ProducteController extends Controller
      */
     public function edit(Producte $producte)
     {
-        //
+        return view('products.edit', compact('producte'));
     }
 
     /**
@@ -52,7 +62,16 @@ class ProducteController extends Controller
      */
     public function update(Request $request, Producte $producte)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'descripcio' => 'required|string',
+            'preu' => 'required|numeric',
+            'quantitat_stock' => 'required|integer',
+        ]);
+
+        $producte->update($request->all());
+
+        return redirect()->route('products.index')->with('success', 'Producte actualitzat correctament.');
     }
 
     /**
@@ -60,6 +79,7 @@ class ProducteController extends Controller
      */
     public function destroy(Producte $producte)
     {
-        //
+        $producte->delete();
+        return redirect()->route('products.index')->with('success', 'Producte eliminat correctament.');
     }
 }
