@@ -2,19 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
+use App\Models\Comanda;
 use App\Models\Producte;
 use Illuminate\Http\Request;
-
 class ProducteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $productes = Producte::all();
-        return view('products.index', compact('productes'));
+    public function index(Request $request)
+{
+    $categories = Categoria::all();
+    $productes = Producte::query();
+
+    // Filtrar per categoria, si es proporciona
+    if ($request->has('categoria') && $request->categoria) {
+        $productes->where('categoria_id', $request->categoria);
     }
+
+    return view('productes.list', [
+        'categories' => $categories,
+        'productes' => $productes->get(),
+    ]);
+}
+
+    
+    
 
     /**
      * Show the form for creating a new resource.
@@ -46,7 +60,8 @@ class ProducteController extends Controller
      */
     public function show(Producte $producte)
     {
-        return view('products.show', compact('producte'));
+        $productes = Producte::all(); // Obtén tots els productes de la base de dades
+        return view('coleccions', compact('productes')); 
     }
 
     /**
@@ -82,4 +97,26 @@ class ProducteController extends Controller
         $producte->delete();
         return redirect()->route('products.index')->with('success', 'Producte eliminat correctament.');
     }
+    public function coleccions(Request $request)
+    {
+        // Obtenim totes les categories
+        $categories = Categoria::all();
+    
+        // Obtenim la categoria seleccionada des de la URL
+        $categoriaSeleccionada = $request->input('categoria', 'totes-les-peces');
+    
+        // Filtrar productes segons la categoria seleccionada
+        if ($categoriaSeleccionada === 'totes-les-peces') {
+            $productes = Producte::all(); // Mostrem tots els productes
+        } else {
+            $productes = Producte::where('categoria_id', $categoriaSeleccionada)->get();
+        }
+    
+        // Retornem les dades a la vista
+        return view('coleccions', compact('categories', 'productes', 'categoriaSeleccionada'));
+
+    }
+    
+
 }
+

@@ -13,7 +13,7 @@ class ComandaController extends Controller
     public function index()
     {
         $comandes = Comanda::all();
-        return view('orders.index', compact('comandes'));
+        return view('Comanda.listc', compact('comandes'));
     }
 
     /**

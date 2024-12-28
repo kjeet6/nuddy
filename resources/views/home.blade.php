@@ -2,27 +2,31 @@
     <header class="w-full bg-black py-5 px-6 shadow-md">
         <nav class="flex justify-between items-center">
             <div class="space-x-6">
-                <a href="#" class="text-yellow-500 hover:text-white">{{ __('Home') }}</a>
-                <a href="#" class="text-yellow-500 hover:text-white">{{ __('Collections') }}</a>
-                <a href="#" class="text-yellow-500 hover:text-white">{{ __('About') }}</a>
-                @auth
-                    <a href="#" class="text-yellow-500 hover:text-white">{{ __('Contact') }}</a>
-                @endauth
+                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-white' : 'text-yellow-500 hover:text-white' }}">
+                    {{ __('Inici') }}
+                </a>
+                <a href="{{ route('coleccions.index') }}" class="{{ request()->routeIs('coleccions.index') ? 'text-white' : 'text-yellow-500 hover:text-white' }}">
+                    {{ __('Col·leccions') }}
+                </a>
+                
+                <a href="{{ route('sobre-nosaltres') }}" class="{{ request()->routeIs('sobre-nosaltres') ? 'text-white' : 'text-yellow-500 hover:text-white' }}">
+                    {{ __('Sobre nosaltres') }}
+                </a>
+                <a href="{{ route('contacte') }}" class="{{ request()->routeIs('contacte') ? 'text-white' : 'text-yellow-500 hover:text-white' }}">
+                    {{ __('Contacte') }}
+                </a>
             </div>
             <div class="flex items-center space-x-6">
                 @auth
-                    <!-- Logged-in User -->
                     <span class="text-yellow-500">{{ Auth::user()->name }}</span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="text-yellow-500 hover:text-white">Logout</button>
+                        <button type="submit" class="text-yellow-500 hover:text-white">{{ __('Logout') }}</button>
                     </form>
                 @else
-                    <!-- Guest Links -->
-                    <a href="{{ route('login') }}" class="text-yellow-500 hover:text-white">Login</a>
-                    <a href="{{ route('register') }}" class="text-yellow-500 hover:text-white">Register</a>
+                    <a href="{{ route('login') }}" class="text-yellow-500 hover:text-white">{{ __('Iniciar sessió') }}</a>
+                    <a href="{{ route('register') }}" class="text-yellow-500 hover:text-white">{{ __('Registrar-se') }}</a>
                 @endauth
-                <!-- Language Selector -->
                 <form method="GET" id="language-form">
                     <select name="language" class="bg-yellow-500 text-black px-2 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600" onchange="window.location.href='/lang/' + this.value;">
                         <option value="ca" {{ session('idioma') == 'ca' ? 'selected' : '' }}>Català</option>
@@ -34,18 +38,18 @@
             </div>
         </nav>
     </header>
-    
+
     <main>
         <section class="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-black min-h-screen flex items-center justify-center">
             <div class="w-full px-4 grid md:grid-cols-2 items-center gap-8">
                 <div>
-                    <h1 class="text-4xl md:text-6xl font-bold mb-4 text-center md:text-left">{{ __('New Collection') }}</h1>
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4 text-center md:text-left">{{ __('Noves Col·leccions') }}</h1>
                     <p class="text-lg md:text-xl mb-8 text-center md:text-left">
-                        {{ __('Discover Our New Collection') }}
+                        {{ __('Descobreix la nostra nova Col·leccio') }}
                     </p>
                     <div class="flex space-x-4 justify-center md:justify-start">
-                        <a href="#" class="bg-black text-yellow-500 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600">{{ __('Buy Now') }}</a>
-                        <a href="#" class="border border-black text-black px-6 py-3 rounded-lg hover:bg-black hover:text-yellow-500">{{ __('View Collection') }}</a>
+                        <a href="{{ route('coleccions.index') }}" class="bg-black text-yellow-500 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600">{{ __('Compra ara') }}</a>
+                        <a href="{{ route('coleccions.index') }}" class="border border-black text-black px-6 py-3 rounded-lg hover:bg-black hover:text-yellow-500">{{ __('Veure col·lecció') }}</a>
                     </div>
                 </div>
                 <div class="flex justify-center md:justify-end">
@@ -55,52 +59,58 @@
                 </div>
             </div>
         </section>
-        
+
         <section class="w-full py-16 px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-black mb-8">{{ __('Categories') }}</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-black mb-8">{{ __('Categories destacades') }}</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="bg-yellow-500 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform">
+                <!-- Botó Jaquetes -->
+                <a href="{{ route('coleccions.index', ['categoria' => 5]) }}" class="bg-yellow-500 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform">
                     <div class="p-4 text-center">
-                        <h3 class="text-xl font-semibold text-black">{{ __('Sweater') }}</h3>
+                        <h3 class="text-xl font-semibold text-black">{{ __('Jaquetes') }}</h3>
                     </div>
-                </div>
-                <div class="bg-yellow-500 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform">
+                </a>
+                <!-- Botó Pantalons -->
+                <a href="{{ route('coleccions.index', ['categoria' => 3]) }}" class="bg-yellow-500 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform">
                     <div class="p-4 text-center">
-                        <h3 class="text-xl font-semibold text-black">{{ __('Pants') }}</h3>
+                        <h3 class="text-xl font-semibold text-black">{{ __('Pantalons') }}</h3>
                     </div>
-                </div>
-                <div class="bg-yellow-500 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform">
+                </a>
+                <!-- Botó Samarreta -->
+                <a href="{{ route('coleccions.index', ['categoria' => 4]) }}" class="bg-yellow-500 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform">
                     <div class="p-4 text-center">
-                        <h3 class="text-xl font-semibold text-black">{{ __('Tshirt') }}</h3>
+                        <h3 class="text-xl font-semibold text-black">{{ __('Samarreta') }}</h3>
                     </div>
-                </div>
-                <div class="bg-yellow-500 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform">
+                </a>
+                <!-- Botó Sabates -->
+                <a href="{{ route('coleccions.index', ['categoria' => 7]) }}" class="bg-yellow-500 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition-transform">
                     <div class="p-4 text-center">
-                        <h3 class="text-xl font-semibold text-black">{{ __('Shoes') }}</h3>
+                        <h3 class="text-xl font-semibold text-black">{{ __('Sabates') }}</h3>
                     </div>
-                </div>
+                </a>
             </div>
         </section>
-    
+        
+        
+
         <section class="w-full bg-black text-yellow-500 py-16 px-4">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center">{{ __('Subscribe') }}</h2>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center">{{ __('Subscriu-te') }}</h2>
             <p class="text-yellow-200 mb-8 max-w-xl mx-auto text-center">
-                {{ __('Subscribe to receive the latest trends, exclusive offers, and inspiration.') }}
+                {{ __('Subscriu-te per rebre les últimes tendències, ofertes exclusives i inspiració') }}
             </p>
             <form class="max-w-md mx-auto flex flex-col md:flex-row gap-4">
-                <input type="email" placeholder="{{ __('Your email address') }}" required class="flex-grow px-4 py-3 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-yellow-500">
-                <button type="submit" class="bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">{{ __('Subscribe Button') }}</button>
+                <input type="email" placeholder="{{ __('Correu electrònic') }}" required class="flex-grow px-4 py-3 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                <button type="submit" class="bg-yellow-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">{{ __('Subscriu-te') }}</button>
             </form>
         </section>
     </main>
-    
+
     <footer class="w-full bg-black text-yellow-500 py-8">
         <div class="w-full px-4 flex flex-col md:flex-row justify-between items-center">
             <p>&copy; 2024 NUDYY </p>
             <div class="flex space-x-4">
-                <a href="#" class="hover:text-white">{{ __('Privacy Policy') }}</a>
-                <a href="#" class="hover:text-white">{{ __('Terms') }}</a>
-                <a href="#" class="hover:text-white">{{ __('Follow Us') }}</a>
+                <a href="#" class="hover:text-white">{{ __('Política de privacitat') }}</a>
+                <a href="#" class="hover:text-white">{{ __('Termes i condicions') }}</a>
+                <a href="#" class="hover:text-white">{{ __('Segueix-nos') }}</a>
             </div>
         </div>
     </footer>
