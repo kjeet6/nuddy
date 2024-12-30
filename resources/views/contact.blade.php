@@ -15,13 +15,31 @@
                     {{ __('Contacte') }}
                 </a>
             </div>
-            <div class="flex items-center space-x-6">
+
+             <div class="flex items-center space-x-6">
                 @auth
                     <span class="text-yellow-500">{{ Auth::user()->name }}</span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="text-yellow-500 hover:text-white">{{ __('Tancar sessió') }}</button>
                     </form>
+
+                    <!-- Icona del carret -->
+                    @php
+                        $quantitatTotal = Auth::user()->carret 
+                            ? Auth::user()->carret->detallsCarret->sum('quantitat') 
+                            : 0;
+                    @endphp
+                    <a href="{{ route('carret.index') }}" class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13l-1.5 8.1M17 13l1.5 8.1M9 21h6M9 5h6" />
+                        </svg>
+                        @if($quantitatTotal > 0)
+                            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
+                                {{ $quantitatTotal }}
+                            </span>
+                        @endif
+                    </a>
                 @else
                     <a href="{{ route('login') }}" class="text-yellow-500 hover:text-white">{{ __('Iniciar sessió') }}</a>
                     <a href="{{ route('register') }}" class="text-yellow-500 hover:text-white">{{ __('Registrar-se') }}</a>

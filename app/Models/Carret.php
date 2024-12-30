@@ -6,13 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Carret extends Model
 {
+    protected $fillable = ['users_id']; 
+
     public function usuari()
     {
-        return $this->belongsTo(User::class);
+        // Especifica la columna correcta aquí
+        return $this->belongsTo(User::class, 'users_id');
     }
 
     public function detallsCarret()
     {
-        return $this->belongsToMany(Producte::class, 'detall_carrets')->withPivot('quantitat');
+        return $this->hasMany(Detall_Carret::class, 'carret_id');
     }
 }

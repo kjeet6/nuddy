@@ -3,43 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
-use App\Models\Comanda;
 use App\Models\Producte;
 use Illuminate\Http\Request;
+
 class ProducteController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Llistat de productes per l'administrador.
      */
     public function index(Request $request)
-{
-    $categories = Categoria::all();
-    $productes = Producte::query();
+    {
+        $categories = Categoria::all();
+        $productes = Producte::query();
 
-    // Filtrar per categoria, si es proporciona
-    if ($request->has('categoria') && $request->categoria) {
-        $productes->where('categoria_id', $request->categoria);
+        // Filtrar per categoria, si es proporciona
+        if ($request->has('categoria') && $request->categoria) {
+            $productes->where('categoria_id', $request->categoria);
+        }
+
+        return view('productes.list', [
+            'categories' => $categories,
+            'productes' => $productes->get(),
+        ]);
     }
 
-    return view('productes.list', [
-        'categories' => $categories,
-        'productes' => $productes->get(),
-    ]);
-}
-
-    
-    
-
     /**
-     * Show the form for creating a new resource.
+     * Vista per crear un nou producte.
      */
     public function create()
     {
-        return view('products.create');
+        $categories = Categoria::all(); // Per seleccionar la categoria al formulari
+        return view('productes.create', compact('categories'));
+
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Emmagatzemar un nou producte.
      */
     public function store(Request $request)
     {
@@ -48,32 +47,41 @@ class ProducteController extends Controller
             'descripcio' => 'required|string',
             'preu' => 'required|numeric',
             'quantitat_stock' => 'required|integer',
+            'categoria_id' => 'required|exists:categories,id',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        Producte::create($request->all());
+        $fotoNom = null;
 
-        return redirect()->route('products.index')->with('success', 'Producte creat correctament.');
+        if ($request->hasFile('foto')) {
+            $fotoNom = time() . '.' . $request->foto->extension();
+            $request->foto->move(public_path('img'), $fotoNom);
+        }
+
+        Producte::create([
+            'nom' => $request->nom,
+            'descripcio' => $request->descripcio,
+            'preu' => $request->preu,
+            'quantitat_stock' => $request->quantitat_stock,
+            'categoria_id' => $request->categoria_id,
+            'foto' => $fotoNom,
+        ]);
+
+        return redirect()->route('productes.index')->with('success', 'Producte creat correctament.');
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Producte $producte)
-    {
-        $productes = Producte::all(); // Obtén tots els productes de la base de dades
-        return view('coleccions', compact('productes')); 
-    }
-
-    /**
-     * Show the form for editing the specified resource.
+     * Vista per editar un producte.
      */
     public function edit(Producte $producte)
     {
-        return view('products.edit', compact('producte'));
+        $categories = Categoria::all();
+        return view('productes.edit', compact('producte', 'categories'));
+
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualitzar un producte existent.
      */
     public function update(Request $request, Producte $producte)
     {
@@ -82,41 +90,55 @@ class ProducteController extends Controller
             'descripcio' => 'required|string',
             'preu' => 'required|numeric',
             'quantitat_stock' => 'required|integer',
+            'categoria_id' => 'required|exists:categories,id',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        $producte->update($request->all());
+        if ($request->hasFile('foto')) {
+            $fotoNom = time() . '.' . $request->foto->extension();
+            $request->foto->move(public_path('img'), $fotoNom);
+            $producte->foto = $fotoNom;
+        }
 
-        return redirect()->route('products.index')->with('success', 'Producte actualitzat correctament.');
+        $producte->update([
+            'nom' => $request->nom,
+            'descripcio' => $request->descripcio,
+            'preu' => $request->preu,
+            'quantitat_stock' => $request->quantitat_stock,
+            'categoria_id' => $request->categoria_id,
+        ]);
+
+        return redirect()->route('productes.index')->with('success', 'Producte actualitzat correctament.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar un producte.
      */
     public function destroy(Producte $producte)
     {
         $producte->delete();
-        return redirect()->route('products.index')->with('success', 'Producte eliminat correctament.');
+        return redirect()->route('productes.index')->with('success', 'Producte eliminat correctament.');
     }
+
+    /**
+     * Llistat de col·leccions per als usuaris i guests.
+     */
     public function coleccions(Request $request)
     {
         // Obtenim totes les categories
         $categories = Categoria::all();
-    
+
         // Obtenim la categoria seleccionada des de la URL
         $categoriaSeleccionada = $request->input('categoria', 'totes-les-peces');
-    
+
         // Filtrar productes segons la categoria seleccionada
         if ($categoriaSeleccionada === 'totes-les-peces') {
             $productes = Producte::all(); // Mostrem tots els productes
         } else {
             $productes = Producte::where('categoria_id', $categoriaSeleccionada)->get();
         }
-    
+
         // Retornem les dades a la vista
         return view('coleccions', compact('categories', 'productes', 'categoriaSeleccionada'));
-
     }
-    
-
 }
-

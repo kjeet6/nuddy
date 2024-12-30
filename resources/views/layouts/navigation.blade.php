@@ -21,6 +21,11 @@
                     <x-nav-link :href="route('comandes.index')" :active="request()->routeIs('comandes.index')" class="text-white hover:text-gray-200">
                         {{ __('Comandes') }}
                     </x-nav-link>
+                    @if(Auth::check() && Auth::user()->is_admin)
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="text-white hover:text-gray-200">
+                        {{ __('Gestió Usuaris') }}
+                    </x-nav-link>
+                @endif
                 </div>
             </div>
 

@@ -62,4 +62,6 @@ class DetallCarretController extends Controller
     {
         //
     }
+    
+
 }

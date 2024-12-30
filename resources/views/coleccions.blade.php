@@ -8,7 +8,6 @@
                 <a href="{{ route('coleccions.index') }}" class="{{ request()->routeIs('coleccions.index') ? 'text-white' : 'text-yellow-500 hover:text-white' }}">
                     {{ __('Col·leccions') }}
                 </a>
-                
                 <a href="{{ route('sobre-nosaltres') }}" class="{{ request()->routeIs('sobre-nosaltres') ? 'text-white' : 'text-yellow-500 hover:text-white' }}">
                     {{ __('Sobre nosaltres') }}
                 </a>
@@ -23,10 +22,29 @@
                         @csrf
                         <button type="submit" class="text-yellow-500 hover:text-white">{{ __('Logout') }}</button>
                     </form>
+
+                    <!-- Icona del carret -->
+                    @php
+                        $quantitatTotal = Auth::user()->carret 
+                            ? Auth::user()->carret->detallsCarret->sum('quantitat') 
+                            : 0;
+                    @endphp
+                    <a href="{{ route('carret.index') }}" class="relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13l-1.5 8.1M17 13l1.5 8.1M9 21h6M9 5h6" />
+                        </svg>
+                        @if($quantitatTotal > 0)
+                            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
+                                {{ $quantitatTotal }}
+                            </span>
+                        @endif
+                    </a>
                 @else
-                    <a href="{{ route('login') }}" class="text-yellow-500 hover:text-white">{{ __('Login') }}</a>
-                    <a href="{{ route('register') }}" class="text-yellow-500 hover:text-white">{{ __('Register') }}</a>
+                    <a href="{{ route('login') }}" class="text-yellow-500 hover:text-white">{{ __('Iniciar sessió') }}</a>
+                    <a href="{{ route('register') }}" class="text-yellow-500 hover:text-white">{{ __('Registrar-se') }}</a>
                 @endauth
+
+                <!-- Botó de canvi d'idioma -->
                 <form method="GET" id="language-form">
                     <select name="language" class="bg-yellow-500 text-black px-2 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600" onchange="window.location.href='/lang/' + this.value;">
                         <option value="ca" {{ session('idioma') == 'ca' ? 'selected' : '' }}>Català</option>
@@ -38,18 +56,14 @@
             </div>
         </nav>
     </header>
-    
 
-    
+    <!-- CONTINGUT EXISTENT -->
     <section class="bg-white shadow-md py-4 px-6 mb-6 rounded-lg">
         <div class="flex space-x-4 overflow-x-auto justify-center">
-            <!-- Botó "Totes les peces" -->
             <a href="{{ route('coleccions.index', ['categoria' => 'totes-les-peces']) }}"
                class="px-4 py-2 rounded-full {{ $categoriaSeleccionada == 'totes-les-peces' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black hover:bg-gray-300' }}">
                 {{ __('Totes les peces') }}
             </a>
-    
-            <!-- Botons de categories -->
             @foreach ($categories as $categoria)
                 @if (!empty($categoria->nom))
                     <a href="{{ route('coleccions.index', ['categoria' => $categoria->id]) }}"
@@ -60,10 +74,7 @@
             @endforeach
         </div>
     </section>
-    
-    
 
-    {{-- Llista de productes --}}
     <main class="p-6 bg-gray-100 min-h-screen">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             @forelse ($productes as $producte)
@@ -72,9 +83,16 @@
                     <h3 class="font-bold text-black truncate">{{ $producte->nom }}</h3>
                     <p class="text-gray-600 text-sm truncate">{{ $producte->descripcio }}</p>
                     <p class="text-yellow-500 font-semibold mt-2">{{ __('Preu:') }} €{{ $producte->preu }}</p>
-                    <a href="#" class="mt-2 inline-block bg-yellow-500 text-black px-4 py-2 rounded-full font-bold hover:bg-yellow-600 transition-colors">
-                        {{ __('Comprar ara') }}
-                    </a>
+                    
+                    <!-- Formulari per afegir al carret -->
+                    <form method="POST" action="{{ route('carret.afegir') }}">
+                        @csrf
+                        <input type="hidden" name="producte_id" value="{{ $producte->id }}">
+                        <button type="submit" class="mt-2 inline-block bg-yellow-500 text-black px-4 py-2 rounded-full font-bold hover:bg-yellow-600 transition-colors">
+                            {{ __('Comprar ara') }}
+                        </button>
+                    </form>
+                    
                 </div>
             @empty
                 <p class="col-span-4 text-center text-gray-500">{{ __('No hi ha productes disponibles en aquesta categoria.') }}</p>

@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -47,7 +48,7 @@ class User extends Authenticatable
     }
     public function carret()
     {
-        return $this->hasOne(Carret::class);
+        return $this->hasOne(Carret::class, 'users_id');
     }
 
     public function comandes()
@@ -59,6 +60,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Producte::class, 'usuari_producte')->withPivot('data_afegit');
     }
+    
 }
 
 
