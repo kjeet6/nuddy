@@ -1,6 +1,7 @@
 <x-guest-layout>
     <header class="w-full bg-black py-5 px-6 shadow-md">
         <nav class="flex justify-between items-center">
+            <!-- Menú de navegació -->
             <div class="space-x-6">
                 <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-white' : 'text-yellow-500 hover:text-white' }}">
                     {{ __('Inici') }}
@@ -16,7 +17,8 @@
                 </a>
             </div>
 
-             <div class="flex items-center space-x-6">
+            <!-- Opcions d'usuari -->
+            <div class="flex items-center space-x-6">
                 @auth
                     <span class="text-yellow-500">{{ Auth::user()->name }}</span>
                     <form method="POST" action="{{ route('logout') }}">
@@ -57,27 +59,28 @@
     </header>
 
     <main class="w-full bg-white min-h-screen flex flex-col items-center justify-center">
-        <h1 class="text-4xl font-bold text-black mb-4">{{ __('Contacte') }}</h1>
+        <h1 class="text-4xl font-bold text-black mb-6">{{ __('Contacte') }}</h1>
         <p class="text-lg text-gray-700 max-w-3xl text-center mb-8">
-            {{ __('Tens alguna pregunta? Contacta amb nosaltres mitjançant el formulari següent.') }}
+            {{ __('Per qualsevol consulta, el nostre horari d\'atenció al client és de dilluns a divendres de 8:00 a 14:00 i de 16:00 a 19:00 hores') }}
         </p>
-        <form action="#" method="POST" class="w-full max-w-lg bg-yellow-500 p-6 rounded-lg shadow-md">
+        <div class="bg-yellow-500 p-6 rounded-lg shadow-md w-full max-w-3xl">
             <div class="mb-4">
-                <label for="name" class="block text-black font-semibold">{{ __('Nom') }}</label>
-                <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-yellow-600">
+                <h2 class="text-2xl font-bold text-black">{{ __('Direcció') }}</h2>
+                <p class="text-black">Carrer Balmes núm 89</p>
             </div>
             <div class="mb-4">
-                <label for="email" class="block text-black font-semibold">{{ __('Correu electrònic') }}</label>
-                <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-yellow-600">
+                <h2 class="text-2xl font-bold text-black">{{ __('Telèfon') }}</h2>
+                <p class="text-black">93 850 23 23</p>
             </div>
             <div class="mb-4">
-                <label for="message" class="block text-black font-semibold">{{ __('Missatge') }}</label>
-                <textarea id="message" name="message" rows="4" required class="w-full px-4 py-3 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-yellow-600"></textarea>
+                <h2 class="text-2xl font-bold text-black">{{ __('Mòbil') }}</h2>
+                <p class="text-black">650 34 23 23</p>
             </div>
-            <button type="submit" class="bg-black text-yellow-500 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
-                {{ __('Enviar') }}
-            </button>
-        </form>
+            <div>
+                <h2 class="text-2xl font-bold text-black">{{ __('Email') }}</h2>
+                <p class="text-black">nuddy@gmail.com</p>
+            </div>
+        </div>
     </main>
 
     <footer class="w-full bg-black text-yellow-500 py-8">

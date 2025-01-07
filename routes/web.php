@@ -20,7 +20,7 @@ Route::post('/users/{id}/update-role', [ProfileController::class, 'updateRole'])
 Route::delete('/comandes/{id}', [ComandaController::class, 'destroy'])->name('comandes.destroy');
 
 
-// Rutes protegides
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // Comprovació del rol per accedir al dashboard
