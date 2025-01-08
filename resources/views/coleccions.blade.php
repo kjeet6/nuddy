@@ -23,7 +23,7 @@
                         <button type="submit" class="text-yellow-500 hover:text-white">{{ __('Logout') }}</button>
                     </form>
 
-                    <!-- Icona del carret -->
+                   
                     @php
                         $quantitatTotal = Auth::user()->carret 
                             ? Auth::user()->carret->detallsCarret->sum('quantitat') 
@@ -44,7 +44,7 @@
                     <a href="{{ route('register') }}" class="text-yellow-500 hover:text-white">{{ __('Registrar-se') }}</a>
                 @endauth
 
-                <!-- Botó de canvi d'idioma -->
+                
                 <form method="GET" id="language-form">
                     <select name="language" class="bg-yellow-500 text-black px-2 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600" onchange="window.location.href='/lang/' + this.value;">
                         <option value="ca" {{ session('idioma') == 'ca' ? 'selected' : '' }}>Català</option>
@@ -57,7 +57,7 @@
         </nav>
     </header>
 
-    <!-- CONTINGUT EXISTENT -->
+   
     <section class="bg-white shadow-md py-4 px-6 mb-6 rounded-lg">
         <div class="flex space-x-4 overflow-x-auto justify-center">
             <a href="{{ route('coleccions.index', ['categoria' => 'totes-les-peces']) }}"
@@ -84,7 +84,7 @@
                     <p class="text-gray-600 text-sm truncate">{{ $producte->descripcio }}</p>
                     <p class="text-yellow-500 font-semibold mt-2">{{ __('Preu:') }} €{{ $producte->preu }}</p>
                     
-                    <!-- Formulari per afegir al carret -->
+                    
                     <form method="POST" action="{{ route('carret.afegir') }}">
                         @csrf
                         <input type="hidden" name="producte_id" value="{{ $producte->id }}">

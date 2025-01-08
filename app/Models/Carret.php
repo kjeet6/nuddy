@@ -10,7 +10,7 @@ class Carret extends Model
 
     public function usuari()
     {
-        // Especifica la columna correcta aquí
+        
         return $this->belongsTo(User::class, 'users_id');
     }
 

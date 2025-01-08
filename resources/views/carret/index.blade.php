@@ -36,20 +36,20 @@
                         </div>
                         <!-- Accions del carret -->
                         <div class="flex items-center space-x-4">
-                            <!-- Botó +1 -->
+                            
                             <form method="POST" action="{{ route('carret.afegir') }}">
                                 @csrf
                                 <input type="hidden" name="producte_id" value="{{ $detall->producte->id }}">
                                 <button type="submit" class="px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded">{{ __('+1') }}</button>
                             </form>
-                            <!-- Botó -1 -->
+                           
                             <form method="POST" action="{{ route('carret.restar', $detall->producte->id) }}">
                                 @csrf
                                 <button type="submit" class="px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded">{{ __('-1') }}</button>
                             </form>
-                            <!-- Quantitat -->
+                         
                             <span class="font-bold text-black">{{ $detall->quantitat }}</span>
-                            <!-- Botó Eliminar -->
+                          
                             <form method="POST" action="{{ route('carret.eliminar', $detall->producte->id) }}">
                                 @csrf
                                 @method('DELETE')
@@ -62,7 +62,7 @@
                 @endforeach
             </div>
 
-            <!-- Resum total -->
+           
             <div class="mt-4 bg-white p-4 rounded-lg shadow-md">
                 <h2 class="text-xl font-semibold">{{ __('Total:') }} €{{ $total }}</h2>
                 <button class="mt-4 bg-yellow-500 text-black px-4 py-2 rounded-full font-bold hover:bg-yellow-600 transition-colors">

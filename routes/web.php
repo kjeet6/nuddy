@@ -26,9 +26,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Comprovació del rol per accedir al dashboard
     Route::get('/dashboard', function () {
         if (Auth::user()->is_admin) {
-            return view('dashboard'); // Mostra el dashboard si és administrador
+            return view('dashboard'); 
         }
-        return redirect('/'); // Redirigeix els no administradors a la pàgina principal
+        return redirect('/'); 
     })->name('dashboard');
 
     // Rutes per a productes

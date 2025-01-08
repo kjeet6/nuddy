@@ -1,7 +1,7 @@
 <x-guest-layout>
     <header class="w-full bg-black py-5 px-6 shadow-md">
         <nav class="flex justify-between items-center">
-            <!-- Menú de navegació -->
+           
             <div class="space-x-6">
                 <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-white' : 'text-yellow-500 hover:text-white' }}">
                     {{ __('Inici') }}
@@ -17,7 +17,7 @@
                 </a>
             </div>
 
-            <!-- Opcions d'usuari -->
+          
             <div class="flex items-center space-x-6">
                 @auth
                     <span class="text-yellow-500">{{ Auth::user()->name }}</span>
@@ -26,7 +26,7 @@
                         <button type="submit" class="text-yellow-500 hover:text-white">{{ __('Tancar sessió') }}</button>
                     </form>
 
-                    <!-- Icona del carret -->
+                  
                     @php
                         $quantitatTotal = Auth::user()->carret 
                             ? Auth::user()->carret->detallsCarret->sum('quantitat') 

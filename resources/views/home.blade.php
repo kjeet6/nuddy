@@ -23,7 +23,7 @@
                         <button type="submit" class="text-yellow-500 hover:text-white">{{ __('Tancar sessió') }}</button>
                     </form>
 
-                    <!-- Icona del carret -->
+               
                     @php
                         $quantitatTotal = Auth::user()->carret 
                             ? Auth::user()->carret->detallsCarret->sum('quantitat') 
@@ -44,7 +44,7 @@
                     <a href="{{ route('register') }}" class="text-yellow-500 hover:text-white">{{ __('Registrar-se') }}</a>
                 @endauth
 
-                <!-- Selecció d'idioma -->
+               
                 <form method="GET" id="language-form">
                     <select name="language" class="bg-yellow-500 text-black px-2 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-600" onchange="window.location.href='/lang/' + this.value;">
                         <option value="ca" {{ session('idioma') == 'ca' ? 'selected' : '' }}>Català</option>

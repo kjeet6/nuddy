@@ -16,7 +16,7 @@ class ProducteController extends Controller
         $categories = Categoria::all();
         $productes = Producte::query();
 
-        // Filtrar per categoria, si es proporciona
+        
         if ($request->has('categoria') && $request->categoria) {
             $productes->where('categoria_id', $request->categoria);
         }
@@ -32,7 +32,7 @@ class ProducteController extends Controller
      */
     public function create()
     {
-        $categories = Categoria::all(); // Per seleccionar la categoria al formulari
+        $categories = Categoria::all(); 
         return view('productes.create', compact('categories'));
 
     }
@@ -125,20 +125,20 @@ class ProducteController extends Controller
      */
     public function coleccions(Request $request)
     {
-        // Obtenim totes les categories
+        
         $categories = Categoria::all();
 
-        // Obtenim la categoria seleccionada des de la URL
+        
         $categoriaSeleccionada = $request->input('categoria', 'totes-les-peces');
 
-        // Filtrar productes segons la categoria seleccionada
+        
         if ($categoriaSeleccionada === 'totes-les-peces') {
-            $productes = Producte::all(); // Mostrem tots els productes
+            $productes = Producte::all(); 
         } else {
             $productes = Producte::where('categoria_id', $categoriaSeleccionada)->get();
         }
 
-        // Retornem les dades a la vista
+        
         return view('coleccions', compact('categories', 'productes', 'categoriaSeleccionada'));
     }
 }
