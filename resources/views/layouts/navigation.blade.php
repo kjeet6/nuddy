@@ -15,9 +15,14 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white hover:text-gray-200">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')" class="text-white hover:text-gray-200">
+                        {{ __('WEB') }}
+                    </x-nav-link>
+                    
                     <x-nav-link :href="route('productes.index')" :active="request()->routeIs('productes.index')" class="text-white hover:text-gray-200">
                         {{ __('Productes') }}
                     </x-nav-link>
+                    
                     <x-nav-link :href="route('comandes.index')" :active="request()->routeIs('comandes.index')" class="text-white hover:text-gray-200">
                         {{ __('Comandes') }}
                     </x-nav-link>

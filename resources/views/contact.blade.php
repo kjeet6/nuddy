@@ -15,6 +15,13 @@
                 <a href="{{ route('contacte') }}" class="{{ request()->routeIs('contacte') ? 'text-white' : 'text-yellow-500 hover:text-white' }}">
                     {{ __('Contacte') }}
                 </a>
+                @auth
+                    @if (Auth::user()->is_admin)
+                        <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'text-white' : 'text-yellow-500 hover:text-white' }}">
+                            {{ __('Dashboard') }}
+                        </a>
+                    @endif
+                @endauth
             </div>
 
           
