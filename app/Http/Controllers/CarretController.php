@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Carret;
+use App\Models\Comanda;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -47,7 +48,7 @@ class CarretController extends Controller
             ]);
         }
     
-        return redirect()->back()->with('success', 'Producte afegit al carret correctament!');
+        return redirect()->back()->with('success', __('Producte afegit al carret correctament!'));
     }
     public function restar($producteId)
 {
@@ -69,7 +70,7 @@ class CarretController extends Controller
         $detall->delete();
     }
 
-    return redirect()->back()->with('success', 'Quantitat actualitzada.');
+    return redirect()->back()->with('success', __('Quantitat actualitzada'));
 }
 
 
@@ -87,6 +88,36 @@ class CarretController extends Controller
 
         $carret->detallsCarret()->where('producte_id', $producteId)->delete();
 
-        return redirect()->back()->with('success', 'Producte eliminat del carret.');
+        return redirect()->back()->with('success', __('Producte eliminat del carret'));
+    }
+    public function finalitzar()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', __('Cal iniciar sessió per finalitzar la compra.'));
+        }
+
+        $carret = Carret::where('users_id', Auth::id())->with('detallsCarret.producte')->first();
+
+        if (!$carret || $carret->detallsCarret->isEmpty()) {
+            return redirect()->route('carret.index')->with('error', __('El carret està buit'));
+        }
+
+       
+        $comanda = Comanda::create([
+            'users_id' => Auth::id(),
+            'data' => now(),
+        ]);
+
+     
+        foreach ($carret->detallsCarret as $detall) {
+            $comanda->detallsComanda()->attach($detall->producte_id, [
+                'quantitat' => $detall->quantitat,
+            ]);
+        }
+
+        
+        $carret->detallsCarret()->delete();
+
+        return redirect()->route('carret.index')->with('success', __('Compra finalitzada! Gràcies per confiar en nosaltres.'));
     }
 }

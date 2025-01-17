@@ -19,8 +19,6 @@ Route::get('/users', [ProfileController::class, 'index'])->name('users.index');
 Route::post('/users/{id}/update-role', [ProfileController::class, 'updateRole'])->name('users.updateRole');
 Route::delete('/comandes/{id}', [ComandaController::class, 'destroy'])->name('comandes.destroy');
 
-
-
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // Comprovació del rol per accedir al dashboard
@@ -32,15 +30,35 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     // Rutes per a productes
-    Route::get('/productes', [ProducteController::class, 'index'])->name('productes.index');
+    Route::get('/productes', function () {
+        if (!Auth::user() || !Auth::user()->is_admin) {
+            return redirect('/')->with('error', 'No tens permís per accedir aquí.');
+        }
+        return app()->call([App\Http\Controllers\ProducteController::class, 'index']);
+    })->name('productes.index');
+    
     Route::resource('productes', ProducteController::class)->except(['show']);
 
     // Rutes per a comandes i cistelles
     Route::get('/comandes', [ComandaController::class, 'index'])->name('comandes.index');
+    
+    // Comandes només accessibles per l'admin
+    Route::middleware(['auth', 'verified'])->group(function () {
+        
+        Route::get('/comandes', [ComandaController::class, 'index'])->name('comandes.index');
+        Route::get('/comandes/{comanda}/edit', [ComandaController::class, 'edit'])->name('comandes.edit');
+        Route::put('/comandes/{comanda}', [ComandaController::class, 'update'])->name('comandes.update');
+        Route::delete('/comandes/{comanda}', [ComandaController::class, 'destroy'])->name('comandes.destroy');
+    });
+    
+    
+
+    // Rutes per a la cistella de la compra
     Route::get('/carret', [CarretController::class, 'index'])->name('carret.index');
     Route::post('/carret/afegir', [CarretController::class, 'store'])->name('carret.afegir');
     Route::post('/carret/restar/{producteId}', [CarretController::class, 'restar'])->name('carret.restar');
     Route::delete('/carret/eliminar/{producteId}', [CarretController::class, 'destroy'])->name('carret.eliminar');
+    Route::post('/carret/finalitzar', [CarretController::class, 'finalitzar'])->name('carret.finalitzar');
 });
 
 // Altres pàgines

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use App\Models\Producte;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ProducteController extends Controller
@@ -13,6 +14,9 @@ class ProducteController extends Controller
      */
     public function index(Request $request)
     {
+        if (!Auth::user()->is_admin) {
+            return redirect('/');
+        }
         $categories = Categoria::all();
         $productes = Producte::query();
 
